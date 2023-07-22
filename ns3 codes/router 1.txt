@@ -1,0 +1,152 @@
+
+R1#conf
+Configuring from terminal, memory, or network [terminal]?
+Enter configuration commands, one per line.  End with CNTL/Z.
+R1(config)#interface Fastethernet 0/0
+R1(config-if)#description to R2
+R1(config-if)#ip address 1.1.1.1 255.255.255.252
+R1(config-if)#no shut
+R1(config-if)#
+*Nov 23 19:18:39.299: %LINK-3-UPDOWN: Interface FastEthernet0/0, changed state to up
+R1(config-if)#
+*Nov 23 19:18:40.299: %LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/0, changed state to up
+R1(config-if)#exit
+R1(config)#interface fa
+% Incomplete command.
+
+R1(config)#interface fastEthernet 0/1
+                      ^
+% Invalid input detected at '^' marker.
+
+R1(config)#interface fastEthernet 0/1
+                      ^
+% Invalid input detected at '^' marker.
+
+R1(config)#interface fastEthernet 0/1
+                      ^
+% Invalid input detected at '^' marker.
+
+R1(config)#interface fa
+% Incomplete command.
+
+R1(config)#int
+% Incomplete command.
+
+R1(config)#interface fastEthernet
+% Incomplete command.
+
+R1(config)#interface fastEthernet 0/1
+                      ^
+% Invalid input detected at '^' marker.
+
+R1(config)#interface fastEthernet 1/0
+R1(config-if)# description To Local LAN
+R1(config-if)#ip address 192.168.1.1 255.255.255.0
+R1(config-if)#no shut
+R1(config-if)#
+*Nov 23 19:30:04.123: %LINK-3-UPDOWN: Interface FastEthernet1/0, changed state to up
+R1(config-if)#
+*Nov 23 19:30:05.123: %LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet1/0, changed state to up
+R1(config-if)#exit
+R1(config)#end
+R1#
+*Nov 23 19:30:17.379: %SYS-5-CONFIG_I: Configured from console by console
+R1#write memory
+Warning: Attempting to overwrite an NVRAM configuration previously written
+by a different version of the system image.
+Overwrite the previous NVRAM configuration?[confirm]
+Building configuration...
+[OK]
+R1#interface brief
+    ^
+% Invalid input detected at '^' marker.
+
+R1#ip interface brief
+    ^
+% Invalid input detected at '^' marker.
+
+R1#sh ip interface brief
+Interface              IP-Address      OK? Method Status                Protocol
+FastEthernet0/0        1.1.1.1         YES manual up                    up
+FastEthernet1/0        192.168.1.1     YES manual up                    up
+FastEthernet1/1        unassigned      YES unset  administratively down down
+
+
+
+
+
+
+R1#ping 2.2.2.1
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 2.2.2.1, timeout is 2 seconds:
+.....
+Success rate is 0 percent (0/5)
+R1#sh ip route
+Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2
+       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
+       ia - IS-IS inter area, * - candidate default, U - per-user static route
+       o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
+       + - replicated route, % - next hop override
+
+Gateway of last resort is not set
+
+      1.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
+C        1.1.1.0/30 is directly connected, FastEthernet0/0
+L        1.1.1.1/32 is directly connected, FastEthernet0/0
+      192.168.1.0/24 is variably subnetted, 2 subnets, 2 masks
+C        192.168.1.0/24 is directly connected, FastEthernet1/0
+L        192.168.1.1/32 is directly connected, FastEthernet1/0
+R1#
+R1#
+R1#
+R1#
+R1#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+R1(config)#router ospf 10
+R1(config-router)#network 1.1.1.0 0.0.0.3 area 1
+R1(config-router)#192.168.1.0 0.0.0.255 area 1
+                  ^
+% Invalid input detected at '^' marker.
+
+R1(config-router)#network 192.168.1.0 0.0.0.255
+% Incomplete command.
+
+R1(config-router)#network 192.168.1.0 0.0.0.255 area 1
+R1(config-router)#end
+R1#
+*Nov 23 20:03:16.379: %SYS-5-CONFIG_I: Configured from console by console
+R1#wr
+Building configuration...
+[OK]
+R1#
+*Nov 23 20:04:17.655: %OSPF-5-ADJCHG: Process 10, Nbr 2.2.2.2 on FastEthernet0/0 from LOADING to FULL, Loading Done
+R1#ping 172.16.1.100
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 172.16.1.100, timeout is 2 seconds:
+.!!!!
+Success rate is 80 percent (4/5), round-trip min/avg/max = 68/330/1104 ms
+R1#ping 172.16.1.100
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 172.16.1.100, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 72/74/80 ms
+R1#
+R1#
+R1#ping 192.168.1.100
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 192.168.1.100, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 1/14/28 ms
+R1#ping 172.16.1.100
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 172.16.1.100, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 68/74/80 ms
+R1#ping 172.16.1.100
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 172.16.1.100, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 68/72/80 ms

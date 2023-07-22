@@ -1,0 +1,64 @@
+R2#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+R2(config)#network 1.1.1.0 0.0.0.3 area 1
+                    ^
+% Invalid input detected at '^' marker.
+
+R2(config)#router ospf 10
+R2(config-router)#network 1.1.1.0 0.0.0.3 area 1
+R2(config-router)#network 2.
+*Nov 23 20:04:17.819: %OSPF-5-ADJCHG: Process 10, Nbr 192.168.1.1 on FastEthernet0/0 from LOADING to FULL, Loading Done
+R2(config-router)#network 2.2.2.0 0.0.0.3 area 1
+R2(config-router)#
+R2(config-router)#
+R2(config-router)#end
+R2#w
+*Nov 23 20:05:26.071: %SYS-5-CONFIG_I: Configured from console by console
+R2#wr
+Building configuration...
+[OK]
+R2#
+R2#
+R2#sh ip route
+Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2
+       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
+       ia - IS-IS inter area, * - candidate default, U - per-user static route
+       o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
+       + - replicated route, % - next hop override
+
+Gateway of last resort is not set
+
+      1.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
+C        1.1.1.0/30 is directly connected, FastEthernet0/0
+L        1.1.1.2/32 is directly connected, FastEthernet0/0
+      2.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
+C        2.2.2.0/30 is directly connected, FastEthernet1/0
+L        2.2.2.2/32 is directly connected, FastEthernet1/0
+O     192.168.1.0/24 [110/2] via 1.1.1.1, 00:01:11, FastEthernet0/0
+R2#
+R2#
+R2#ping 192.168.1.100
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 192.168.1.100, timeout is 2 seconds:
+.!!!!
+Success rate is 80 percent (4/5), round-trip min/avg/max = 36/298/1068 ms
+R2#ping 192.168.1.100
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 192.168.1.100, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 32/42/48 ms
+R2#
+*Nov 23 20:09:58.411: %OSPF-5-ADJCHG: Process 10, Nbr 172.16.1.1 on FastEthernet1/0 from LOADING to FULL, Loading Done
+R2#ping 192.168.1.100
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 192.168.1.100, timeout is 2 seconds:
+.!!!!
+Success rate is 80 percent (4/5), round-trip min/avg/max = 40/297/1052 ms
+R2#ping 192.168.1.100
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 192.168.1.100, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 40/43/48 ms
